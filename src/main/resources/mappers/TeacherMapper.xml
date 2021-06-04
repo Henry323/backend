@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.example.vx.mapper.TeacherMapper">
+
+    <!--微信小程序登录检测老师账号密码是否正确-->
+    <!-- Integer login(Teacher teacher); -->
+    <select id="login" parameterType="com.example.vx.entity.Teacher" resultType="Integer">
+        select count(*) from teacher where phone = #{phone} and password=#{password}
+    </select>
+
+    <!--微信小程序登录检测老师是否存在该账号-->
+    <!-- Integer query(Teacher teacher); -->
+    <select id="query" parameterType="com.example.vx.entity.Teacher" resultType="Integer">
+        select count(*) from teacher where phone = #{phone}
+    </select>
+
+    <!--将老师的账号密码存入数据库中-->
+    <!-- Integer addnew(Teacher teacher); -->
+    <insert id="addnew">
+        INSERT INTO teacher (
+            phone, password
+        ) VALUES (
+                     #{phone}, #{password}
+                 )
+    </insert>
+
+    <!--修改数据库中指定老师账号的密码-->
+    <!-- void wxupdate(Teacher teacher); -->
+    <update id="wxupdate" parameterType="com.example.vx.entity.Teacher">
+        update teacher set password = #{password} where phone = #{phone}
+    </update>
+
+    <!--将指定老师的时间和课程代码存入对应的数据库中-->
+    <!-- void publish(Teacher teacher); -->
+    <update id="publish" >
+        update teacher set classcode = #{classcode}, time = #{time} where phone = #{phone}
+    </update>
+
+    <!--将指定老师的个人信息存入对应的数据库中-->
+    <!-- void edit(Teacher teacher); -->
+    <update id="edit" >
+        update teacher set mail = #{mail}, name= #{name}, classcode= #{classcode}, classcode2= #{classcode2} where phone = #{phone}
+    </update>
+
+    <!--将指定账号的老师信息返回-->
+    <!-- List<String> editback(Teacher teacher); -->
+    <select id="editback" parameterType="com.example.vx.entity.Teacher" resultType="map">
+        select mail, name, classcode, classcode2 from teacher where phone= #{phone}
+    </select>
+
+    <!--将指定账号的老师信息返回-->
+    <!-- List<String> login_get(Teacher teacher); -->
+    <select id="login_get" parameterType="com.example.vx.entity.Teacher" resultType="map">
+        select classcode, classcode2 from teacher where phone= #{phone}
+    </select>
+
+    <!--将指定账号的老师信息返回-->
+    <!-- String getname(Teacher teacher); -->
+    <select id="getname" parameterType="com.example.vx.entity.Teacher" resultType="String">
+        select name from teacher where phone= #{phone}
+    </select>
+
+    <!--将指定账号的学生预订返回-->
+    <!-- List<String> tshow(Student student); -->
+    <select id="tshow" parameterType="com.example.vx.entity.Teacher" resultType="String">
+        select time_class from course where teacher= #{name}
+    </select>
+
+    <!--将学生预订的电话号码返回给老师-->
+    <!-- List<String> SelectStudentPhone(Teacher teacher); -->
+    <select id="SelectStudentPhone" parameterType="com.example.vx.entity.Teacher" resultType="String">
+        select phone from course where teacher= #{name}
+    </select>
+</mapper>

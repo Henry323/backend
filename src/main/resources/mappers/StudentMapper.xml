@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.example.vx.mapper.StudentMapper">
+    <!--微信小程序登录检测学生账号密码是否正确-->
+    <!-- Integer login(Student student); -->
+    <select id="login" parameterType="com.example.vx.entity.Student" resultType="Integer">
+        select count(*) from student where phone = #{phone} and password=#{password}
+    </select>
+
+    <!--微信小程序登录检测学生是否存在该账号-->
+    <!-- Integer query(Student student); -->
+    <select id="query" parameterType="com.example.vx.entity.Student" resultType="Integer">
+        select count(*) from student where phone = #{phone}
+    </select>
+
+    <!--将学生的账号密码存入数据库中-->
+    <!-- Integer addnew(Student student); -->
+    <insert id="addnew">
+        INSERT INTO student (
+            phone, password
+        ) VALUES (
+                     #{phone}, #{password}
+                 )
+    </insert>
+
+    <!--修改数据库中指定学生账号的密码-->
+    <!-- void wxupdate(Student student); -->
+    <update id="wxupdate" parameterType="com.example.vx.entity.Student">
+        update student set password = #{password} where phone = #{phone}
+    </update>
+
+    <!--将指定账号的学生信息返回-->
+    <!-- List<String> editback(Student student); -->
+    <select id="editback" parameterType="com.example.vx.entity.Student" resultType="map">
+        select mail,id, name,major from student where phone= #{phone}
+    </select>
+
+    <!--将指定学生的个人信息存入对应的数据库中-->
+    <!-- void edit(Student student); -->
+    <update id="edit" >
+        update student set id= #{id},mail = #{mail}, name= #{name}, major= #{major} where phone = #{phone}
+    </update>
+
+    <!--根据专业查找数据库中对应的老师名字-->
+    <!-- void search(Teacher teacher); -->
+    <select id="search" parameterType="com.example.vx.entity.Teacher" resultType="String">
+        select name from teacher where classcode=#{classcode} or classcode2=#{classcode2}
+    </select>
+
+    <!--根据专业查找数据库中对应的老师时间-->
+    <!-- void search1(Teacher teacher); -->
+    <select id="search1" parameterType="com.example.vx.entity.Teacher" resultType="String">
+        select time from teacher where classcode=#{classcode} or classcode2=#{classcode2}
+    </select>
+
+    <!--根据名字查找数据库中对应的老师时间-->
+    <!-- void time(String name); -->
+    <select id="time" parameterType="String" resultType="String">
+        select time from teacher where name=#{name}
+    </select>
+
+    <!--将指定学生的选课信息存入对应的数据库中-->
+    <!-- void submit(Student student); -->
+    <insert id="submit">
+        INSERT INTO course (
+            phone, time_class, teacher
+        ) VALUES (
+                     #{phone}, #{time_class}, #{teacher}
+                 )
+    </insert>
+
+    <!--将指定账号的学生预订返回-->
+    <!-- List<String> sshow(Student student); -->
+    <select id="sshow" parameterType="com.example.vx.entity.Student" resultType="String">
+        select time_class from course where phone= #{phone}
+    </select>
+</mapper>
